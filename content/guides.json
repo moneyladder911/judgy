@@ -1,0 +1,218 @@
+[
+  {
+    "slug": "online-trading-course",
+    "question": "Should I buy an online trading course?",
+    "verdict": "walk", "score": 2.5,
+    "short": "Usually not. Most paid trading courses sell the dream of quitting your job, and the income screenshots come from the few who got lucky.",
+    "flags": [
+      "Income screenshots and lifestyle photos are marketing, not proof that students make money.",
+      "Countdown timers and \"only 3 spots left\" are pressure tactics. Real education doesn't expire tonight.",
+      "Many courses upsell signals groups, coaching or a \"pro\" tier once you're in."
+    ],
+    "alt": "Learn the basics free from your broker's education pages, library books and regulator guides, and practise on a demo account for three months before spending anything.",
+    "checks": [
+      "Ask for audited results of typical students, not the best ones.",
+      "Get the refund policy in writing before you pay.",
+      "Search the course name plus \"scam\", \"refund\" and \"reddit\"."
+    ],
+    "q": "Online trading course for $1,500, 50% off today only"
+  },
+  {
+    "slug": "extended-warranty",
+    "question": "Should I buy the extended warranty?",
+    "verdict": "walk", "score": 3,
+    "short": "Usually no. Extended warranties are priced so the store makes money on them, and most products don't break in the extra years they cover.",
+    "flags": [
+      "Many credit cards already add an extra year of warranty to purchases.",
+      "The fine print often excludes the things that actually break, like batteries and accidental damage.",
+      "The sales push at the till is a sign of how profitable these plans are."
+    ],
+    "alt": "Put the warranty money in a savings pot for repairs. If you are clumsy with phones, compare the maker's own accident plan instead of the store's.",
+    "checks": [
+      "Check what the manufacturer's warranty already covers.",
+      "Check your credit card's purchase protection.",
+      "Read exactly what is excluded before deciding."
+    ],
+    "q": "Extended 3-year warranty for $199 on a $900 laptop"
+  },
+  {
+    "slug": "used-car-without-inspection",
+    "question": "Should I buy a used car without an inspection?",
+    "verdict": "walk", "score": 2,
+    "short": "No. An independent pre-purchase inspection costs a little and can save you thousands. A seller who won't allow one is telling you something.",
+    "flags": [
+      "Hidden accident damage, flood damage and failing gearboxes don't show on a test drive.",
+      "\"Sold as seen\" means you have little comeback after you pay.",
+      "Pressure to decide today is a reason to slow down."
+    ],
+    "alt": "Pay for an independent inspection and a vehicle history report, or choose a certified pre-owned car with a warranty.",
+    "checks": [
+      "Run the vehicle history report for accidents, write-offs and mileage.",
+      "Book an independent mechanic, not one the seller suggests.",
+      "Compare the total price, not the monthly payment."
+    ],
+    "q": "Used 2018 SUV, 70,000 miles, $16,000, seller says no time for an inspection"
+  },
+  {
+    "slug": "new-iphone-or-last-years",
+    "question": "Should I buy the new iPhone or last year's model?",
+    "verdict": "wait", "score": 6,
+    "short": "If your phone works, last year's model or a refurbished one does nearly everything for a lot less. Buy new only if a specific new feature matters to you.",
+    "flags": [
+      "Year-to-year upgrades are usually small. Check what's actually different for how you use it.",
+      "0% financing makes the price feel smaller but locks you in for years.",
+      "Trade-in offers often pay less than selling your old phone yourself."
+    ],
+    "alt": "A manufacturer-refurbished or last-generation model with a full warranty, often 20 to 30% cheaper.",
+    "checks": [
+      "List the two features you'd actually use every day.",
+      "Compare the refurbished price from the maker's own store.",
+      "Price your old phone on a resale site before accepting a trade-in."
+    ],
+    "q": "New iPhone Pro on 0% financing, $1,199, my current phone still works"
+  },
+  {
+    "slug": "mattress-sale",
+    "question": "Should I buy a mattress on a \"today only\" sale?",
+    "verdict": "wait", "score": 5,
+    "short": "Mattress sales run most of the year, so \"today only\" rarely is. If you need a new mattress, buy one with a long home trial instead of chasing the deadline.",
+    "flags": [
+      "The list price is often set high so the sale price looks like a bargain.",
+      "Returns can be expensive or have pick-up fees. Check before you buy.",
+      "Showroom tests of a few minutes tell you little about sleeping on it for months."
+    ],
+    "alt": "A well-reviewed online mattress with a 100-night trial and free returns.",
+    "checks": [
+      "Find out how long the trial is and who pays for a return.",
+      "Check the price history if the store lets you.",
+      "Read the 1-star reviews for sagging and durability complaints."
+    ],
+    "q": "$1,800 mattress, 40% off today only"
+  },
+  {
+    "slug": "crypto-trading-bot",
+    "question": "Should I buy a crypto trading bot?",
+    "verdict": "walk", "score": 1,
+    "short": "No. Bots and signal groups promising steady daily returns match the most common investment scam pattern. Nobody sells a machine that prints money.",
+    "flags": [
+      "Guaranteed or steady daily returns are the classic sign of a scam.",
+      "Many of these platforms let money in but make withdrawals difficult or impossible.",
+      "If you're asked to recruit friends or deposit more to unlock profits, walk away."
+    ],
+    "alt": "If you want to invest, a low-cost, regulated index fund. If you're already in, try a small withdrawal now and report the platform to your regulator if it fails.",
+    "checks": [
+      "Search your financial regulator's warning list for the company name.",
+      "Never send money to someone you met through a DM.",
+      "Talk to a qualified financial adviser before investing large sums."
+    ],
+    "q": "Crypto trading bot an influencer DMed me, guaranteed 2% a day"
+  },
+  {
+    "slug": "buy-now-pay-later",
+    "question": "Should I use buy now, pay later?",
+    "verdict": "wait", "score": 4.5,
+    "short": "It's fine for something you could pay for today anyway. It's a problem when it's the only way you can afford it, because the payments stack up.",
+    "flags": [
+      "Several small plans at once add up fast and are easy to lose track of.",
+      "Missed payments can bring late fees and may affect your credit.",
+      "Splitting the price makes impulse buys feel cheaper than they are."
+    ],
+    "alt": "Wait until you can pay in full. If it's still worth it after saving for a few weeks, buy it then.",
+    "checks": [
+      "Add up every plan you already have running.",
+      "Read the late fee terms.",
+      "Ask: would I buy this if I had to pay all of it today?"
+    ],
+    "q": "Designer jacket $600 in 4 payments with Klarna"
+  },
+  {
+    "slug": "timeshare",
+    "question": "Should I buy a timeshare?",
+    "verdict": "walk", "score": 1.5,
+    "short": "Almost always no. Timeshares come with yearly fees that tend to rise, they're hard to resell, and the sales presentations are built around pressure.",
+    "flags": [
+      "Annual maintenance fees continue for years and often go up.",
+      "Resale values are typically far below what buyers paid.",
+      "\"Free\" gifts for attending a presentation are bait for a high-pressure pitch."
+    ],
+    "alt": "Book holiday rentals as you go. You keep your money and your freedom to go somewhere else next year.",
+    "checks": [
+      "Check the cooling-off period where you are, and use it if you've signed.",
+      "Look up resale listings for the same resort.",
+      "Never sign on the day of the presentation."
+    ],
+    "q": "Timeshare presentation, $25,000 with a free cruise if I sign today"
+  },
+  {
+    "slug": "refurbished-laptop",
+    "question": "Should I buy a refurbished laptop?",
+    "verdict": "buy", "score": 7.5,
+    "short": "Often yes, if it's refurbished by the maker or a reputable seller with a real warranty. You can get a much better laptop for the same money.",
+    "flags": [
+      "\"Refurbished\" means different things. Check who did the work.",
+      "Battery health varies. Ask for the battery condition or a replacement guarantee.",
+      "Avoid sellers with no warranty or a very short return window."
+    ],
+    "alt": "Buy manufacturer-certified refurbished first; it usually comes with the same warranty as new.",
+    "checks": [
+      "Confirm the warranty length and who honours it.",
+      "Check the model year so it still gets software updates.",
+      "Test everything in the return window: ports, keyboard, screen, battery."
+    ],
+    "q": "Refurbished MacBook Air, 1 year warranty, $750"
+  },
+  {
+    "slug": "tiktok-supplement",
+    "question": "Should I buy a supplement I saw on TikTok?",
+    "verdict": "walk", "score": 3,
+    "short": "Be very careful. Supplements don't have to prove they work before they're sold, and creator videos are usually paid ads.",
+    "flags": [
+      "Before-and-after videos and testimonials aren't evidence.",
+      "\"Subscribe and save\" can quietly turn into monthly charges.",
+      "Some supplements interact with medicines. Check with a pharmacist or doctor first."
+    ],
+    "alt": "Ask a pharmacist what has real evidence for your goal. It's often a cheap, plain product.",
+    "checks": [
+      "Look for independent third-party testing on the label.",
+      "Check if the creator is sponsored.",
+      "Read the cancellation terms before subscribing."
+    ],
+    "q": "$65 a month gut health gummies from a TikTok ad"
+  },
+  {
+    "slug": "dropshipping-mentorship",
+    "question": "Should I buy a dropshipping mentorship?",
+    "verdict": "walk", "score": 2,
+    "short": "Usually not. The person selling the mentorship often makes more from selling mentorships than from dropshipping.",
+    "flags": [
+      "Revenue screenshots show sales, not profit after ads, refunds and fees.",
+      "Much of the material is available free on YouTube and blogs.",
+      "High-ticket coaching often comes with pressure to pay for more tiers."
+    ],
+    "alt": "Spend a month on free material and test one product with a small ad budget you can afford to lose. You'll learn more for far less.",
+    "checks": [
+      "Ask for proof of profit, not revenue.",
+      "Get the refund policy in writing.",
+      "Find past students who aren't affiliates."
+    ],
+    "q": "$3,000 dropshipping mentorship with income screenshots"
+  },
+  {
+    "slug": "car-finance-84-months",
+    "question": "Should I finance a car over 84 months?",
+    "verdict": "walk", "score": 3,
+    "short": "Usually no. A seven-year loan lowers the monthly payment but raises the total you pay, and you can owe more than the car is worth for years.",
+    "flags": [
+      "Longer loans usually mean more interest in total.",
+      "You may be \"underwater\" (owing more than it's worth) for much of the loan.",
+      "The low monthly figure can push you into a more expensive car than you need."
+    ],
+    "alt": "A cheaper car over a shorter loan, with financing arranged through your own bank or credit union before visiting the dealer.",
+    "checks": [
+      "Ask for the total cost of the loan, all payments added up.",
+      "Get a quote from your own bank first.",
+      "Compare the same car over 48 or 60 months."
+    ],
+    "q": "New SUV $45,000 financed over 84 months at $650 a month"
+  }
+]

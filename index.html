@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Judgy — Ask the panel before you pay</title>
+  <meta name="description" content="Describe a purchase and an AI panel gives you a verdict in about a minute: Buy, Wait or Walk away, a score out of 10, the top 3 red flags and a cheaper alternative.">
+  <meta property="og:title" content="Judgy">
+  <meta property="og:description" content="Buy, Wait or Walk away. Ask the panel before you pay.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0b0b10">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="glow" aria-hidden="true"></div>
+
+  <header class="nav" id="top">
+    <div class="wrap nav__inner">
+      <a class="brand" href="#top" aria-label="Judgy home">
+        <span class="brand__mark" aria-hidden="true">?</span>
+        <span class="brand__name">Judgy</span>
+      </a>
+      <button class="nav__toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu"><span></span><span></span></button>
+      <nav class="nav__links" id="nav-links" aria-label="Primary">
+        <a href="#how">How it works</a>
+        <a href="#panel">The panel</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+        <a href="/guides/">Guides</a>
+        <a class="btn btn--small btn--lime" href="#try">Try it free</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO + LIVE DEMO -->
+    <section class="hero" id="try">
+      <div class="wrap hero__grid">
+        <div class="hero__copy">
+          <p class="eyebrow"><span class="pulse"></span>5 judges · 1 minute · 0 sales pitch</p>
+          <h1 class="hero__title">Before you pay,<br><span class="hero__ask">ask the panel.</span></h1>
+          <p class="hero__lede">Describe what you’re about to buy. Five AI judges argue it out and hand you a verdict card: <b class="t-buy">Buy</b>, <b class="t-wait">Wait</b> or <b class="t-walk">Walk&nbsp;away</b>, a score out of 10, the three biggest red flags and a cheaper way to get the same thing.</p>
+
+          <form class="demo" id="demo" novalidate>
+            <label class="demo__label" for="purchase">What are you about to buy?</label>
+            <div class="demo__row">
+              <textarea id="purchase" name="purchase" rows="2" maxlength="220" placeholder="e.g. $2,000 online trading course, 50% off today only" required></textarea>
+              <button class="btn btn--lime demo__go" type="submit">Get the verdict</button>
+            </div>
+            <div class="demo__chips" role="group" aria-label="Try an example">
+              <button type="button" class="chip" data-example="$2,000 online trading course, 50% off today only">💸 $2k trading course</button>
+              <button type="button" class="chip" data-example="Used 2019 BMW 3 Series, 68k miles, $24,000 with dealer financing">🚗 Used BMW</button>
+              <button type="button" class="chip" data-example="Crypto bot an influencer DMed me, guaranteed 2% a day">🪙 Crypto bot</button>
+              <button type="button" class="chip" data-example="$1,800 mattress, my old one is broken, 100-night trial">🛏️ Mattress</button>
+              <button type="button" class="chip" data-example="iPhone 17 Pro Max on 0% financing, $1,199">📱 New iPhone</button>
+            </div>
+            <p class="demo__note" id="demo-note">Live demo: verdicts here come from a quick rule check in your browser. The real panel researches your exact purchase.</p>
+          </form>
+        </div>
+
+        <div class="stage" aria-live="polite">
+          <!-- Deliberation -->
+          <div class="deliberate" id="deliberate" hidden>
+            <p class="deliberate__title mono">The panel is deliberating…</p>
+            <ul class="deliberate__list" id="deliberate-list"></ul>
+          </div>
+
+          <!-- Verdict card -->
+          <article class="vcard" id="vcard" data-verdict="wait">
+            <header class="vcard__head">
+              <span class="vcard__brand"><span class="brand__mark brand__mark--sm" aria-hidden="true">?</span>Judgy</span>
+              <span class="vcard__tag mono" id="v-tag">Sample verdict</span>
+            </header>
+            <p class="vcard__item" id="v-item">“A $1,800 mattress, 40% off today only”</p>
+
+            <div class="vcard__main">
+              <div class="ring" role="img" id="v-ring" aria-label="Score 5 out of 10">
+                <svg viewBox="0 0 120 120" aria-hidden="true">
+                  <circle class="ring__track" cx="60" cy="60" r="52"/>
+                  <circle class="ring__bar" id="v-bar" cx="60" cy="60" r="52"/>
+                </svg>
+                <span class="ring__num"><b id="v-score">5</b><small>/10</small></span>
+              </div>
+              <div class="vcard__stampwrap">
+                <span class="stamp" id="v-stamp">Wait</span>
+                <p class="vcard__line" id="v-line">Not yet. Give it 72 hours.</p>
+              </div>
+            </div>
+
+            <div class="vcard__votes" id="v-votes" aria-label="How the judges voted"></div>
+
+            <div class="vcard__block">
+              <p class="mono vcard__label">Top 3 red flags</p>
+              <ol class="flags" id="v-flags">
+                <li>The deadline is a sales tactic. Real deals come back.</li>
+                <li>Mattress “sales” run most of the year, so the list price is rarely the real price.</li>
+                <li>Check the trial period and who pays for the return.</li>
+              </ol>
+            </div>
+
+            <div class="vcard__block vcard__alt">
+              <p class="mono vcard__label">Cheaper or safer instead</p>
+              <p id="v-alt">A well-reviewed online mattress with a 100-night trial, often well under half the price.</p>
+              <a class="vcard__altlink" id="v-alt-link" href="#" target="_blank" rel="sponsored noopener" hidden>Compare prices ↗</a>
+              <p class="vcard__aff" id="v-aff" hidden>Affiliate link: we may earn a small commission. It never changes a verdict.</p>
+            </div>
+
+            <div class="vcard__hours" id="v-hours-wrap">
+              <span id="v-hours">≈ 72 hours of work</span>
+              <label class="wage">at <span>$</span><input id="wage" type="number" inputmode="decimal" min="1" max="1000" step="1" value="25" aria-label="Your hourly pay in dollars">/hr</label>
+            </div>
+
+            <footer class="vcard__foot">
+              <button type="button" class="btn btn--small btn--lime" id="download">Download card</button>
+              <button type="button" class="btn btn--small btn--ghost" id="share">Share</button>
+              <span class="vcard__msg" id="share-msg" role="status"></span>
+            </footer>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- VERDICT TICKER -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker__track">
+        <span><b class="t-walk">WALK AWAY</b> “$3k dropshipping mentorship”</span>
+        <span><b class="t-buy">BUY</b> “Replacing my broken washer, $650”</span>
+        <span><b class="t-wait">WAIT</b> “Air fryer, 30% off ends tonight”</span>
+        <span><b class="t-walk">WALK AWAY</b> “Timeshare presentation, free cruise”</span>
+        <span><b class="t-wait">WAIT</b> “PS5 bundle on monthly payments”</span>
+        <span><b class="t-buy">BUY</b> “Certified pre-owned Corolla, inspected”</span>
+        <span><b class="t-walk">WALK AWAY</b> “$3k dropshipping mentorship”</span>
+        <span><b class="t-buy">BUY</b> “Replacing my broken washer, $650”</span>
+        <span><b class="t-wait">WAIT</b> “Air fryer, 30% off ends tonight”</span>
+        <span><b class="t-walk">WALK AWAY</b> “Timeshare presentation, free cruise”</span>
+        <span><b class="t-wait">WAIT</b> “PS5 bundle on monthly payments”</span>
+        <span><b class="t-buy">BUY</b> “Certified pre-owned Corolla, inspected”</span>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <section class="section" id="how">
+      <div class="wrap">
+        <header class="head reveal">
+          <p class="eyebrow">How it works</p>
+          <h2 class="h2">Sixty seconds between you and a bad decision.</h2>
+        </header>
+        <ol class="steps">
+          <li class="step reveal">
+            <span class="step__n">1</span>
+            <h3>Describe it</h3>
+            <p>Paste a link or just say it: the course, the car, the “once in a lifetime” deal. Add the price and anything the seller told you.</p>
+          </li>
+          <li class="step reveal">
+            <span class="step__n">2</span>
+            <h3>The panel argues</h3>
+            <p>Five judges look at it from five angles, from your bank balance to fraud patterns. They’re built to disagree, not to agree with you.</p>
+          </li>
+          <li class="step reveal">
+            <span class="step__n">3</span>
+            <h3>Get your card</h3>
+            <p>Buy, Wait or Walk away. A score, the red flags, a cheaper alternative, and a card you can send to whoever’s pressuring you.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- PANEL -->
+    <section class="section section--alt" id="panel">
+      <div class="wrap">
+        <header class="head reveal">
+          <p class="eyebrow">The panel</p>
+          <h2 class="h2">Five judges. None of them on commission.</h2>
+          <p class="lede">Every check runs past the same five seats. Hover one to hear what they always ask.</p>
+        </header>
+        <div class="judges">
+          <article class="judge reveal" tabindex="0" style="--c: var(--buy)"><span class="judge__av">AC</span><h3>The Accountant</h3><p class="judge__role">Can you actually afford it?</p><p class="judge__q">“What’s the total, fees and interest included, and what does it push off your list?”</p></article>
+          <article class="judge reveal" tabindex="0" style="--c: var(--walk)"><span class="judge__av">FI</span><h3>The Fraud Investigator</h3><p class="judge__role">Is this a scam pattern?</p><p class="judge__q">“Guaranteed returns, a DM out of nowhere, a deadline tonight. I’ve seen this one before.”</p></article>
+          <article class="judge reveal" tabindex="0" style="--c: var(--wait)"><span class="judge__av">BH</span><h3>The Bargain Hunter</h3><p class="judge__role">Is there a better deal?</p><p class="judge__q">“Last year’s model, refurbished, used, or the free version. Something cheaper does 90% of this.”</p></article>
+          <article class="judge reveal" tabindex="0" style="--c: var(--lime)"><span class="judge__av">SK</span><h3>The Skeptic</h3><p class="judge__role">Does it do what it claims?</p><p class="judge__q">“Show me the evidence. Testimonials and before-and-afters don’t count.”</p></article>
+          <article class="judge reveal" tabindex="0" style="--c: var(--violet)"><span class="judge__av">FY</span><h3>Future You</h3><p class="judge__role">Will you be glad in 6 months?</p><p class="judge__q">“Is this a need, a want, or a bad week? Tell me how you’ll use it on a Tuesday.”</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARD ANATOMY / WALL -->
+    <section class="section" id="cards">
+      <div class="wrap">
+        <header class="head reveal">
+          <p class="eyebrow">Built to be sent</p>
+          <h2 class="h2">The card that ends the argument.</h2>
+          <p class="lede">Send it to the friend who swears the course changed their life, or the partner eyeing the new car. Each card says exactly why.</p>
+        </header>
+        <div class="wall">
+          <figure class="mini reveal" data-verdict="walk"><span class="mini__stamp">Walk away</span><b class="mini__score">2<small>/10</small></b><figcaption>“$3,000 Amazon FBA mentorship with income screenshots”</figcaption><span class="mini__eg mono">Example</span></figure>
+          <figure class="mini reveal" data-verdict="buy"><span class="mini__stamp">Buy</span><b class="mini__score">8<small>/10</small></b><figcaption>“Replacing my dead fridge, $900 model with 4.6 stars”</figcaption><span class="mini__eg mono">Example</span></figure>
+          <figure class="mini reveal" data-verdict="wait"><span class="mini__stamp">Wait</span><b class="mini__score">5<small>/10</small></b><figcaption>“$450 smart ring, the new version drops in spring”</figcaption><span class="mini__eg mono">Example</span></figure>
+          <figure class="mini reveal" data-verdict="walk"><span class="mini__stamp">Walk away</span><b class="mini__score">1<small>/10</small></b><figcaption>“Forex signals group, guaranteed 30% a month”</figcaption><span class="mini__eg mono">Example</span></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="section section--alt" id="pricing">
+      <div class="wrap">
+        <header class="head head--center reveal">
+          <p class="eyebrow">Pricing</p>
+          <h2 class="h2">Costs less than one bad impulse buy.</h2>
+        </header>
+        <div class="prices">
+          <article class="price reveal">
+            <h3>First check</h3>
+            <p class="price__amt">Free</p>
+            <p class="price__sub">No card needed</p>
+            <ul><li>One full verdict card</li><li>All five judges</li><li>Share it anywhere</li></ul>
+            <a class="btn btn--ghost btn--block" href="#try">Use your free check</a>
+          </article>
+          <article class="price price--hot reveal">
+            <p class="price__badge mono">Most popular</p>
+            <h3>30-day pass</h3>
+            <p class="price__amt">$15<small>/30 days</small></p>
+            <p class="price__sub">No auto-renew, nothing to cancel</p>
+            <ul><li>Unlimited checks for 30 days</li><li>Full panel with live price research</li><li>Download and share every card</li></ul>
+            <a class="btn btn--lime btn--block" href="#pricing" data-plan="pass">Get the pass</a>
+          </article>
+          <article class="price reveal">
+            <h3>Single check</h3>
+            <p class="price__amt">$7</p>
+            <p class="price__sub">Pay as you go</p>
+            <ul><li>One full verdict card</li><li>Full panel with live price research</li><li>No subscription</li></ul>
+            <a class="btn btn--ghost btn--block" href="#pricing" data-plan="single">Buy one check</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+      <div class="wrap faq">
+        <header class="head reveal">
+          <p class="eyebrow">FAQ</p>
+          <h2 class="h2">Good questions. Ask them before you buy, too.</h2>
+        </header>
+        <div class="faq__list">
+          <details class="reveal"><summary>Why not just ask a chatbot?</summary><p>You can. A single chatbot tends to agree with how you framed the question. Our panel is five judges set up to disagree with each other, and it always ends in the same clear format: a verdict, a score, three red flags and an alternative. It takes a minute, and the card is made to share.</p></details>
+          <details class="reveal"><summary>Is this financial advice?</summary><p>No. A verdict is a second opinion to help you think, not professional financial, legal or medical advice. For big decisions, talk to a qualified professional.</p></details>
+          <details class="reveal"><summary>Do sellers pay you for good verdicts?</summary><p>Never. No seller can buy, sponsor or influence a verdict. When the cheaper alternative is a product, we may link to a store search with an affiliate tag and label it. That commission never changes a verdict, and it’s never on the thing you asked about.</p></details>
+          <details class="reveal"><summary>How does the 30-day pass work?</summary><p>You pay once and get unlimited checks for 30 days. It doesn’t renew on its own, so there’s nothing to cancel. Payments are handled securely by Ziina and may be charged in UAE dirhams (AED).</p></details>
+          <details class="reveal"><summary>What can I check?</summary><p>Anything you’re about to spend real money on: cars, courses, gadgets, furniture, memberships, “investment opportunities”, even that subscription you’re not sure about.</p></details>
+          <details class="reveal"><summary>What happens to what I type?</summary><p>It’s used to write your verdict. We don’t sell it, and we won’t share a card unless you do.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <!-- WAITLIST -->
+    <section class="section cta" id="waitlist">
+      <div class="wrap cta__inner reveal">
+        <h2 class="h2">3 viral buys, rated. Every week.</h2>
+        <p class="lede">The products everyone’s pushing this week, run past the panel. Free, one email, unsubscribe anytime.</p>
+        <form class="signup" id="signup" novalidate>
+          <label class="sr-only" for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+          <button class="btn btn--lime" type="submit">Send me the list</button>
+        </form>
+        <p class="signup__msg" id="signup-msg" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="paywall" id="paywall" aria-labelledby="pay-title">
+    <button type="button" class="paywall__x" id="pay-close" aria-label="Close">×</button>
+    <p class="eyebrow">Keep asking</p>
+    <h2 class="paywall__title" id="pay-title">Get the full panel</h2>
+    <p class="paywall__lead" id="pay-lead">Pick a plan and the full panel is yours.</p>
+    <div class="paywall__plans">
+      <button type="button" class="paywall__plan paywall__plan--hot" data-plan="pass"><b>30-day pass</b><span class="paywall__amt">$15</span><small>Unlimited checks for 30 days</small></button>
+      <button type="button" class="paywall__plan" data-plan="single"><b>Single check</b><span class="paywall__amt">$7</span><small>One full verdict</small></button>
+    </div>
+    <p class="paywall__msg" id="pay-msg" role="status"></p>
+    <p class="paywall__fine">Secure checkout by Ziina. No subscription.</p>
+  </dialog>
+
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <a class="brand" href="#top"><span class="brand__mark" aria-hidden="true">?</span><span class="brand__name">Judgy</span></a>
+      <p class="fine"><a href="/guides/">Should I buy…? guides</a> · Verdicts are opinions to help you decide, not financial, legal or medical advice. Some alternative links are affiliate links. © <span id="year">2026</span> Judgy</p>
+    </div>
+  </footer>
+
+  <script src="assets/main.js" defer></script>
+</body>
+</html>
