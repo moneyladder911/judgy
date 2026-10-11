@@ -49,8 +49,14 @@
           <form class="demo" id="demo" novalidate>
             <label class="demo__label" for="purchase">What are you about to buy?</label>
             <div class="demo__row">
-              <textarea id="purchase" name="purchase" rows="2" maxlength="220" placeholder="e.g. $2,000 online trading course, 50% off today only" required></textarea>
+              <textarea id="purchase" name="purchase" rows="2" maxlength="220" placeholder="e.g. $2,000 trading course, 50% off today only"></textarea>
               <button class="btn btn--lime demo__go" type="submit">Get the verdict</button>
+            </div>
+            <div class="demo__media">
+              <label class="demo__add" for="photos"><span aria-hidden="true">📷</span> Add photo, screenshot or video</label>
+              <input id="photos" class="sr-only" type="file" accept="image/*,video/*" multiple>
+              <ul class="demo__thumbs" id="thumbs" aria-label="Attached photos"></ul>
+              <span class="demo__mediamsg" id="media-msg" role="status"></span>
             </div>
             <div class="demo__chips" role="group" aria-label="Try an example">
               <button type="button" class="chip" data-example="$2,000 online trading course, 50% off today only">💸 $2k trading course</button>
@@ -76,6 +82,7 @@
               <span class="vcard__brand"><span class="brand__mark brand__mark--sm" aria-hidden="true">?</span>Judgy</span>
               <span class="vcard__tag mono" id="v-tag">Sample verdict</span>
             </header>
+            <div class="vcard__photos" id="v-photos" hidden></div>
             <p class="vcard__item" id="v-item">“A $1,800 mattress, 40% off today only”</p>
 
             <div class="vcard__main">

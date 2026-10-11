@@ -140,6 +140,16 @@ test("pass works repeatedly; wrong amount or tampered token is refused", async (
   assert.equal(r.data.tier, "free", "a forged token is treated as no token");
 });
 
+test("photos are sent to the panel; a photo alone is enough", async () => {
+  const img = "A".repeat(200);
+  const r = await call(verdict, { text: "", images: [img, "not base64!", 42] }, "5.5.5.5");
+  assert.equal(r.status, 200);
+  const content = anthropicCalls.at(-1).messages[0].content;
+  assert.equal(content.filter((b) => b.type === "image").length, 1);
+  assert.equal(content[0].source.data, img);
+  assert.equal((await call(verdict, { text: "", images: [] }, "6.6.6.6")).status, 400);
+});
+
 test("email list", async () => {
   assert.equal((await call(subscribe, { email: "nope" })).status, 400);
   assert.equal((await call(subscribe, { email: "A@b.co" })).status, 200);
