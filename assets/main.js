@@ -64,6 +64,7 @@ const CATEGORIES = [
       "If you’re asked to recruit friends or deposit more to unlock profits, that’s the model, not a bonus.",
     ],
     alt: "A low-cost index fund. Boring, regulated, and nobody DMs you about it.",
+    lines: { buy: "Even a scheme can’t get a Buy from us.", wait: "Don’t send a cent until you’ve tested a withdrawal.", walk: "Walk away. This is the scam pattern." },
   },
   {
     key: "course", base: 4,
@@ -74,6 +75,7 @@ const CATEGORIES = [
       "Much of this is likely free on YouTube, in a library book, or in a free course audit.",
     ],
     alt: "Spend two weeks on free material first. If you’re still doing the work, a $30 book or a $50 course is the next step.",
+    lines: { buy: "Worth it if you’ll actually do the work.", wait: "Do two weeks of free material first.", walk: "Walk away. You’re buying the dream, not the skill." },
   },
   {
     key: "car", base: 6,
@@ -84,26 +86,29 @@ const CATEGORIES = [
       "Compare the total price including interest, not the monthly payment.",
     ],
     alt: "The same model a year or two older, certified pre-owned, financed through your own bank or credit union.",
+    lines: { buy: "Solid buy, once the inspection comes back clean.", wait: "Get it inspected and price the total loan first.", walk: "Walk away. The numbers and the risks don’t add up." },
   },
   {
     key: "home", base: 5,
-    test: /mattress|sofa|couch|sectional|bed frame|recliner|furniture|dining table/i,
+    test: /mattress|sofa|couch|sectional|bed frame|recliner|furniture|dining table|washing machine|washer|dryer|fridge|refrigerator|dishwasher|oven|appliance/i,
     flags: [
       "Furniture and mattress “sales” run most of the year, so the list price is rarely the real price.",
       "Check the trial period and who pays for a return before you buy.",
       "Measure your space and doorways. Big items are expensive to send back.",
     ],
     alt: "A well-reviewed online brand with a long home trial, often far cheaper than the showroom.",
+    lines: { buy: "Good buy for something you use every day.", wait: "Find the real price; this sale will come back.", walk: "Walk away. You’re paying showroom markup." },
   },
   {
     key: "tech", base: 6,
     test: /iphone|phone|samsung|galaxy|pixel|laptop|macbook|ipad|tablet|\btv\b|television|headphones|airpods|camera|console|ps5|playstation|xbox|switch|smart ?watch|smart ring|gpu|graphics card/i,
     flags: [
       "Check when the next model is due. Buying weeks before a launch is the worst timing.",
-      "Last year’s model usually does nearly everything this one does.",
+      "Buy from the maker or an authorised seller so the full warranty applies.",
       "Extended warranties and protection plans are mostly profit for the seller.",
     ],
-    alt: "Last year’s model or a manufacturer-refurbished unit with a full warranty, often 20–30% less.",
+    alt: "If you want to save, last year’s model or a manufacturer-refurbished unit with a full warranty is often 20–30% less. New is still the safer bet for battery life and the longest software support.",
+    lines: { buy: "Good timing and a fair price. Go for it.", wait: "Check if a new model is due before you pay.", walk: "Walk away. Last year’s model does this for less." },
   },
   {
     key: "flex", base: 5,
@@ -114,6 +119,7 @@ const CATEGORIES = [
       "Ask yourself honestly: would you still want it if nobody saw it?",
     ],
     alt: "Wait a month and check the price again. If you still want it then, buy it authenticated.",
+    lines: { buy: "If you’ll wear it to death, enjoy it.", wait: "Wait a month. If you still want it, buy authenticated.", walk: "Walk away. You’re paying for hype." },
   },
   {
     key: "wellness", base: 4,
@@ -124,6 +130,18 @@ const CATEGORIES = [
       "Look for independent third-party testing on the label.",
     ],
     alt: "Ask a pharmacist or doctor what actually has evidence for your goal. Often it’s the cheap, boring option.",
+    lines: { buy: "Reasonable, if it has real evidence behind it.", wait: "Ask for evidence before you pay.", walk: "Walk away. Big claims, no proof." },
+  },
+  {
+    key: "everyday", base: 6.5,
+    test: /toothbrush|toothpaste|floss|mouthwash|shampoo|conditioner|soap|razor|deodorant|perfume|cologne|towel|socks|underwear|t-?shirt|jeans|hoodie|jacket|shoes|trainers|backpack|groceries|snack|coffee|kitchen|frying pan|\bpan\b|knife|blender|air fryer|kettle|toaster|charger|cable|phone case|lamp|bedding|pillow|water bottle/i,
+    flags: [
+      (p) => p ? `At $${p.toLocaleString("en-US")}, find out what the basic, well-reviewed version costs. That gap is what you’re paying for the brand.` : "Check what the basic, well-reviewed version costs. That’s your baseline.",
+      "Think cost per use: how often will you actually use it, and for how long?",
+      "Read the 1-star reviews. Cheap-feeling build and fast wear show up there first.",
+    ],
+    alt: "The best-reviewed basic version. Put the difference toward something you’ll actually notice.",
+    lines: { buy: "Low stakes, real use. Buy it.", wait: "Fine if you need it, but not at this price.", walk: "Walk away. The basic version does the same job." },
   },
   {
     key: "general", base: 6, test: /.*/,
@@ -133,6 +151,7 @@ const CATEGORIES = [
       "Search the product name plus “problems” and read the 1-star reviews.",
     ],
     alt: "The same thing used or refurbished, or a cheaper version with most of the features.",
+    lines: { buy: "Looks like a sensible buy.", wait: "Compare two alternatives before you tap pay.", walk: "Walk away. It doesn’t earn its price." },
   },
 ];
 
@@ -145,8 +164,10 @@ const SIGNALS = [
     flag: "It found you through a DM or an influencer. That’s how pressure sales work." },
   { test: /financ|monthly|per month|\/mo\b|a month\b|installments?|klarna|afterpay|affirm|0% apr|0% interest|payment plan/i, delta: -0.75,
     flag: "Paying monthly hides the real price. Look at the total cost." },
-  { test: /broken|broke|died|dead|stopped working|replace|replacement|need (it|one|a) for work|for my job/i, delta: 1.75, good: true },
-  { test: /refurbished|certified|inspected|warranty|trial|return policy|reviews?|4\.\d stars/i, delta: 0.75, good: true },
+  { test: /miracle|ancient|ancestral|secret formula|clinically proven|doctors hate|instant results|whitening|all[- ]natural|100% natural/i, delta: -0.75,
+    flag: "Bold claims like “miracle”, “ancient” or “clinically proven” need a source. Ask for it before you pay." },
+  { test: /broken|broke|died|dead|stopped working|replace|replacement|for (my )?(work|job|business|school|uni|university|studies)|need (it|one|a)/i, delta: 1.75, good: true },
+  { test: /certified|inspected|warranty|trial|return policy|reviews?|4\.\d stars|official store|apple store|authori[sz]ed/i, delta: 0.75, good: true },
 ];
 
 const JUDGES = [
@@ -172,12 +193,14 @@ const LABEL = { buy: "Buy", wait: "Wait", walk: "Walk away" };
 function parsePrice(text) {
   let best = null;
   // "$24k", "$1,800" or "500 dollars"; a bare "68k" is usually miles, so it's ignored
-  const re = /\$\s?(\d[\d,]*(?:\.\d+)?)\s*(k\b)?|(\d[\d,]*(?:\.\d+)?)\s*(dollars|usd|bucks)/gi;
+  // also "45$", "€45", "AED 200" and "200 dirhams" (dirhams converted to dollars)
+  const re = /(?:\$|€|£|\baed|\bdhs?)\s?(\d[\d,]*(?:\.\d+)?)\s*(k\b)?|(\d[\d,]*(?:\.\d+)?)\s*(k\b)?\s*(\$|€|£|dollars|usd|bucks|euros?|pounds|aed|dhs?\b|dirhams?)/gi;
   let m;
   while ((m = re.exec(text))) {
     const raw = (m[1] || m[3]).replace(/,/g, "");
     let n = parseFloat(raw);
     if (/k/i.test(m[2] || m[4] || "")) n *= 1000;
+    if (/aed|dh|dirham/i.test(m[0])) n = Math.round(n / 3.67);
     if (!Number.isNaN(n) && (best === null || n > best)) best = n;
   }
   return best;
@@ -203,21 +226,38 @@ function judge(text) {
     if (s.flag) flags.push(s.flag);
   });
   const price = parsePrice(text);
-  if (price !== null && price >= 20000) score -= 0.5;
-  flags.push(cat.flags[0]);
+  // Low stakes earn some slack; big money needs a stronger case
+  if (price !== null) score += price < 60 ? 0.75 : price < 300 ? 0 : price < 2000 ? -0.25 : price < 20000 ? -0.5 : -0.75;
+  // No pressure, no financing, no big claims: an ordinary purchase from a normal seller deserves credit
+  const clean = !SIGNALS.slice(0, 5).some((sig) => sig.test.test(text));
+  if (clean && ["tech", "home", "everyday", "general", "car"].includes(cat.key)) score += 0.75;
+  // Everyday items have a cheap baseline, so a premium price needs a reason
+  if (cat.key === "everyday" && price !== null && price >= 40) score -= 1.75;
+  const has = (re) => re.test(text);
+  const urgent = has(SIGNALS[0].test) || has(SIGNALS[2].test);
+  const claims = cat.key === "scheme" || cat.key === "course" || cat.key === "wellness" || has(SIGNALS[4].test);
+  const need = has(SIGNALS[5].test);
+  const tidy = (f) => (typeof f === "function" ? f(price) : f);
+  flags.push(tidy(cat.flags[0]));
   if (price === null) flags.push("No price given. Write down the total, fees included, before you decide.");
-  cat.flags.slice(1).forEach((f) => flags.push(f));
+  cat.flags.slice(1).forEach((f) => flags.push(tidy(f)));
+  // A genuine need (something broke) doesn't need a cooling-off period
+  if (need) flags.splice(0, flags.length, ...flags.filter((f) => !f.startsWith("Sleep on it")));
   score = Math.round(clamp(score, 1, 9.5) * 2) / 2;
   const verdict = toVerdict(score);
-  const votes = JUDGES.map((j) => {
-    let s = score + j.bias;
-    if (j.id === "FI" && cat.key === "scheme") s = 1;
-    return { id: j.id, vote: toVerdict(s) };
-  });
+  // Each judge weighs a different risk, so they don't all vote the same way
+  const lens = {
+    AC: (price ?? 0) >= 2000 ? -0.75 : price !== null && price < 100 ? 0.75 : 0,
+    FI: urgent ? -1.5 : cat.key === "scheme" ? -9 : 0.5,
+    BH: price !== null && price < 300 ? 0 : -0.75,
+    SK: claims ? -1.25 : 0.25,
+    FY: need ? 1 : cat.key === "flex" ? -0.75 : 0,
+  };
+  const votes = JUDGES.map((j) => ({ id: j.id, vote: toVerdict(score + j.bias + lens[j.id]) }));
   // Gadgets: a renewed version of what they typed. Furniture: the same thing, to compare prices.
   const words = productWords(text);
   const altSearch = cat.key === "tech" ? `${words} renewed` : cat.key === "home" ? words : "";
-  return { verdict, score, flags: flags.slice(0, 3), alt: cat.alt, altSearch, price, votes };
+  return { verdict, score, line: cat.lines[verdict], flags: flags.slice(0, 3), alt: cat.alt, altSearch, price, votes };
 }
 
 
@@ -249,7 +289,7 @@ function renderNote() {
   } else if (a?.p === "single") {
     note.textContent = "You have a paid check ready. Type your purchase and it goes to the full panel.";
   } else {
-    note.textContent = "Type your own purchase for a real verdict. Your first one is free. The example buttons show quick samples.";
+    note.textContent = "Type your purchase or add a photo for a real verdict. Your first one is free. The example buttons show quick samples.";
   }
 }
 
@@ -312,16 +352,23 @@ function renderAltLink(r) {
   note.hidden = !CONFIG.amazonTag;
 }
 
-function renderCard(text, r, tag) {
+function renderCard(text, r, tag, pics = []) {
   current = { ...r, text };
   card.dataset.verdict = r.verdict;
   $("#v-tag").textContent = tag;
-  const clipped = text.length > 110 ? text.slice(0, 107).trimEnd() + "…" : text;
-  $("#v-item").textContent = `“${clipped}”`;
+  const label = text || (pics.length > 1 ? `${pics.length} photos` : "Your photo");
+  const clipped = label.length > 110 ? label.slice(0, 107).trimEnd() + "…" : label;
+  $("#v-item").textContent = text ? `“${clipped}”` : clipped;
+  const strip = $("#v-photos");
+  strip.hidden = !pics.length;
+  strip.replaceChildren(...pics.map((p) => { const img = document.createElement("img"); img.src = p.url; img.alt = ""; return img; }));
   $("#v-stamp").textContent = LABEL[r.verdict];
   $("#v-line").textContent = r.line || LINES[r.verdict];
   $("#v-flags").replaceChildren(...r.flags.map((f) => { const li = document.createElement("li"); li.textContent = f; return li; }));
   $("#v-alt").textContent = r.alt;
+  // On a Buy, the flags are checks and the alternative is optional savings, not a reason not to buy
+  $("#v-flags-label").textContent = r.verdict === "buy" ? "Check before you pay" : "Top 3 red flags";
+  $("#v-alt-label").textContent = r.verdict === "buy" ? "Want to spend less?" : "Cheaper or safer instead";
   renderAltLink(r);
 
   $("#v-votes").replaceChildren(...r.votes.map((v) => {
@@ -387,12 +434,12 @@ async function deliberation(pending) {
 }
 
 // Ask the real panel; anything other than a verdict or a paywall falls back to the demo
-async function askPanel(text) {
+async function askPanel(text, pics) {
   try {
     const res = await fetch("/api/verdict", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text, token: store.get() || undefined }),
+      body: JSON.stringify({ text, images: pics.map((p) => p.data), token: store.get() || undefined }),
     });
     const data = await res.json().catch(() => ({}));
     if (res.ok && data.verdict) {
@@ -408,11 +455,109 @@ async function askPanel(text) {
   return { ok: true, r: judge(text), tag: "Demo verdict" };
 }
 
+/* ---------- Photos, screenshots and video frames ---------- */
+const MAX_PHOTOS = 4;
+let photos = []; // { data: base64 JPEG, url: data URL for thumbnails }
+const photoInput = $("#photos");
+const thumbs = $("#thumbs");
+const mediaMsg = $("#media-msg");
+
+function renderThumbs() {
+  thumbs.replaceChildren(...photos.map((p, i) => {
+    const li = document.createElement("li");
+    const img = document.createElement("img");
+    img.src = p.url;
+    img.alt = `Photo ${i + 1}`;
+    const x = document.createElement("button");
+    x.type = "button";
+    x.textContent = "×";
+    x.setAttribute("aria-label", `Remove photo ${i + 1}`);
+    x.addEventListener("click", () => { photos.splice(i, 1); renderThumbs(); });
+    li.append(img, x);
+    return li;
+  }));
+  mediaMsg.textContent = photos.length >= MAX_PHOTOS ? `Up to ${MAX_PHOTOS} photos.` : "";
+}
+
+// Shrinks to at most 1280px on the long side as a JPEG, small enough to send quickly
+function toJpeg(source, w, h) {
+  const scale = Math.min(1, 1280 / Math.max(w, h));
+  const cv = document.createElement("canvas");
+  cv.width = Math.round(w * scale);
+  cv.height = Math.round(h * scale);
+  cv.getContext("2d").drawImage(source, 0, 0, cv.width, cv.height);
+  const url = cv.toDataURL("image/jpeg", 0.82);
+  return { url, data: url.split(",")[1] };
+}
+
+function imageToJpeg(file) {
+  return new Promise((ok, fail) => {
+    const img = new Image();
+    const src = URL.createObjectURL(file);
+    img.onload = () => { URL.revokeObjectURL(src); ok(toJpeg(img, img.naturalWidth, img.naturalHeight)); };
+    img.onerror = () => { URL.revokeObjectURL(src); fail(new Error("unreadable image")); };
+    img.src = src;
+  });
+}
+
+// A video becomes up to 3 still frames from across the clip
+function videoToJpegs(file, count) {
+  return new Promise((ok, fail) => {
+    const v = document.createElement("video");
+    const src = URL.createObjectURL(file);
+    const frames = [];
+    v.muted = true;
+    v.playsInline = true;
+    v.preload = "auto";
+    const done = () => { URL.revokeObjectURL(src); frames.length ? ok(frames) : fail(new Error("no frames")); };
+    v.onerror = done;
+    v.onloadedmetadata = () => {
+      const d = Number.isFinite(v.duration) && v.duration > 0 ? v.duration : 1;
+      const times = Array.from({ length: count }, (_, i) => (d * (i + 1)) / (count + 1));
+      const next = () => {
+        if (!times.length) return done();
+        v.currentTime = times.shift();
+      };
+      v.onseeked = () => {
+        if (v.videoWidth) frames.push(toJpeg(v, v.videoWidth, v.videoHeight));
+        next();
+      };
+      next();
+    };
+    v.src = src;
+  });
+}
+
+async function addFiles(files) {
+  for (const file of files) {
+    const room = MAX_PHOTOS - photos.length;
+    if (room <= 0) break;
+    try {
+      if (file.type.startsWith("video/")) {
+        mediaMsg.textContent = "Grabbing frames from your video…";
+        photos.push(...(await videoToJpegs(file, Math.min(3, room))));
+      } else if (file.type.startsWith("image/")) {
+        photos.push(await imageToJpeg(file));
+      }
+    } catch {
+      mediaMsg.textContent = "Couldn’t read that file. Try a screenshot instead.";
+      continue;
+    }
+    renderThumbs();
+  }
+}
+
+photoInput.addEventListener("change", () => { addFiles([...photoInput.files]); photoInput.value = ""; });
+input.addEventListener("paste", (e) => {
+  const files = [...(e.clipboardData?.files || [])].filter((f) => f.type.startsWith("image/"));
+  if (files.length) { e.preventDefault(); addFiles(files); }
+});
+
 let busy = false;
-async function run(text, { example = false } = {}) {
+async function run(text, { example = false, pics = example ? [] : photos } = {}) {
   if (busy) return;
   const value = text.trim();
-  if (value.length < 3) {
+  if (value.length < 3 && !pics.length) {
     input.setAttribute("aria-invalid", "true");
     input.focus();
     setTimeout(() => input.removeAttribute("aria-invalid"), 600);
@@ -423,7 +568,7 @@ async function run(text, { example = false } = {}) {
   btn.disabled = true;
   const pending = example || !CONFIG.ai
     ? Promise.resolve({ ok: true, r: judge(value), tag: example ? "Sample verdict" : "Demo verdict" })
-    : askPanel(value);
+    : askPanel(value, pics);
   card.hidden = true;
   deliberate.hidden = false;
   if (window.matchMedia("(max-width: 900px)").matches) {
@@ -432,8 +577,10 @@ async function run(text, { example = false } = {}) {
   const result = await deliberation(pending);
   deliberate.hidden = true;
   card.hidden = false;
-  if (result.ok) renderCard(value, result.r, result.tag);
-  else if (result.paywall) openPaywall("You’ve used your free check. Pick a plan and the panel will take this one.");
+  if (result.ok) {
+    renderCard(value, result.r, result.tag, pics);
+    if (!example) { photos = []; renderThumbs(); }
+  } else if (result.paywall) openPaywall("You’ve used your free check. Pick a plan and the panel will take this one.");
   else $("#share-msg").textContent = result.message;
   renderNote();
   btn.disabled = false;
@@ -531,7 +678,7 @@ async function cardImage() {
   y = wrap($("#v-line").textContent, pad, y, W - pad * 2, 54, 2) + 30;
 
   // Red flags
-  c.fillStyle = lime; c.font = "700 28px 'JetBrains Mono', monospace"; c.fillText("TOP 3 RED FLAGS", pad, y); y += 56;
+  c.fillStyle = lime; c.font = "700 28px 'JetBrains Mono', monospace"; c.fillText($("#v-flags-label").textContent.toUpperCase(), pad, y); y += 56;
   c.font = "500 34px Inter, sans-serif";
   current.flags.forEach((f, i) => {
     c.fillStyle = tone; c.fillText(`${i + 1}`, pad, y);
@@ -540,7 +687,7 @@ async function cardImage() {
 
   // Alternative
   y += 16;
-  c.fillStyle = lime; c.font = "700 28px 'JetBrains Mono', monospace"; c.fillText("CHEAPER OR SAFER INSTEAD", pad, y); y += 56;
+  c.fillStyle = lime; c.font = "700 28px 'JetBrains Mono', monospace"; c.fillText($("#v-alt-label").textContent.toUpperCase(), pad, y); y += 56;
   c.fillStyle = "#e4e4ea"; c.font = "500 34px Inter, sans-serif";
   wrap(current.alt, pad, y, W - pad * 2, 46, 3);
 
@@ -602,7 +749,9 @@ async function checkout(plan, btn) {
     });
     const data = await res.json();
     if (!res.ok || !data.url) throw new Error();
-    try { sessionStorage.setItem("judgy_pending", input.value.trim()); } catch {}
+    const keep = (data) => { try { sessionStorage.setItem("judgy_pending", JSON.stringify(data)); return true; } catch { return false; } };
+    // Photos can be too big for session storage; then at least keep the text
+    keep({ text: input.value.trim(), photos }) || keep({ text: input.value.trim(), photos: [] });
     location.href = data.url;
   } catch {
     payMsg.textContent = "Checkout didn’t open. Try again in a moment.";
@@ -639,9 +788,14 @@ async function redeemReturn() {
         store.set(data.token);
         renderNote();
         msg.textContent = data.plan === "pass" ? "Your 30-day pass is active. Ask away." : "Your check is ready.";
-        let pendingText = "";
-        try { pendingText = sessionStorage.getItem("judgy_pending") || ""; sessionStorage.removeItem("judgy_pending"); } catch {}
-        if (pendingText) { input.value = pendingText; run(pendingText); }
+        let saved = null;
+        try { saved = JSON.parse(sessionStorage.getItem("judgy_pending") || "null"); sessionStorage.removeItem("judgy_pending"); } catch {}
+        if (saved && (saved.text || saved.photos?.length)) {
+          input.value = saved.text || "";
+          photos = saved.photos || [];
+          renderThumbs();
+          run(input.value);
+        }
         return;
       }
       if (data.status && !["pending", "requires_user_action", "requires_payment_instrument"].includes(data.status)) break;

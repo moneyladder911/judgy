@@ -21,8 +21,8 @@ const SCHEMA = {
     verdict: VOTE,
     score: { type: "number", description: "1 to 10, halves allowed. 7+ is buy, 4 to 6.5 is wait, below 4 is walk." },
     line: { type: "string", description: "One short sentence verdict in plain words, under 60 characters." },
-    flags: { type: "array", items: { type: "string" }, description: "Exactly 3 red flags, most important first, each one sentence." },
-    alternative: { type: "string", description: "One or two sentences: a cheaper or safer way to get the same result." },
+    flags: { type: "array", items: { type: "string" }, description: "Exactly 3 points, most important first, each one sentence: red flags for Wait or Walk away, things to check before paying for Buy." },
+    alternative: { type: "string", description: "One or two sentences: a cheaper or safer way to get the same result, or why the original is already the best option." },
     alternative_search: { type: "string", description: "A short shopping search for the alternative if it is a physical product (e.g. 'refurbished iPhone 16 Pro'), otherwise an empty string." },
     price: { type: "number", description: "Total price in US dollars if known, otherwise 0." },
     votes: {
@@ -49,18 +49,38 @@ const SYSTEM = `You are the panel behind "Judgy". A person describes something t
 - SK, The Skeptic: does it do what it claims? Evidence, not testimonials.
 - FY, Future You: will they be glad in six months? Need, want, or a bad week?
 
+They may attach photos: an ad, a listing, a product, a price tag, a screenshot of a chat, or still frames from one video. Read them carefully for the product, price, seller and any claims, and use what you see.
+
+Be fair, not stingy. A needed or wanted purchase at a fair price from a reputable seller, with no pressure tactics, deserves Buy; don't default to Wait. New is often the right call over used or refurbished (warranty, battery, software support), so only suggest a cheaper route when it is genuinely just as good, and say so when the original is the best option. On a Buy, the three flags are things to check before paying rather than reasons not to buy.
+
 Be direct and specific to this exact purchase. The judges are allowed to disagree. The overall verdict follows the score. Never recommend a specific seller. Never guarantee outcomes. This is an opinion to help someone think, not financial, legal or medical advice; if the purchase involves health or large investments, one flag should say to check with a qualified professional. If the text is not a purchase, score it 5, verdict wait, and use the flags to explain what to describe instead.`;
 
 let client;
 const anthropic = () => (client ||= new Anthropic());
 
-async function askPanel(text, paid) {
+const MAX_IMAGES = 4;
+const MAX_IMAGE_CHARS = 1_000_000; // base64 characters, about 750 KB per image
+
+export function readImages(images) {
+  if (!Array.isArray(images)) return [];
+  return images
+    .filter((d) => typeof d === "string" && d.length > 100 && d.length <= MAX_IMAGE_CHARS && /^[A-Za-z0-9+/]+=*$/.test(d))
+    .slice(0, MAX_IMAGES);
+}
+
+async function askPanel(text, images, paid) {
   const params = {
     model: paid ? MODEL_PAID : MODEL_FREE,
     max_tokens: 4000,
     system: SYSTEM,
     output_config: { effort: paid ? "medium" : "low", format: { type: "json_schema", schema: SCHEMA } },
-    messages: [{ role: "user", content: `Purchase to judge:\n\n${text}` }],
+    messages: [{
+      role: "user",
+      content: [
+        ...images.map((data) => ({ type: "image", source: { type: "base64", media_type: "image/jpeg", data } })),
+        { type: "text", text: text ? `Purchase to judge:\n\n${text}` : "Purchase to judge: it's in the photos. Work out what it is and the price from them." },
+      ],
+    }],
   };
   if (paid) params.tools = [{ type: "web_search_20260209", name: "web_search", max_uses: 3 }];
 
@@ -102,9 +122,10 @@ export function normalise(raw) {
 
 export default async function handler(req, res) {
   if (onlyPost(req, res)) return;
-  const { text = "", token } = body(req);
+  const { text = "", token, images: rawImages } = body(req);
   const purchase = String(text).trim().slice(0, 600);
-  if (purchase.length < 3) return send(res, 400, { error: "describe_purchase" });
+  const images = readImages(rawImages);
+  if (purchase.length < 3 && !images.length) return send(res, 400, { error: "describe_purchase" });
   if (!process.env.ANTHROPIC_API_KEY || !kvEnabled()) return send(res, 503, { fallback: true });
 
   // Work out which kind of check this is, and claim it before spending anything
@@ -133,7 +154,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const result = await askPanel(purchase, Boolean(pass));
+    const result = await askPanel(purchase, images, Boolean(pass));
     return send(res, 200, { ...result, tier: pass ? pass.p : "free" });
   } catch (err) {
     console.error("panel failed", err);
