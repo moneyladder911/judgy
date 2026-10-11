@@ -21,8 +21,8 @@ const SCHEMA = {
     verdict: VOTE,
     score: { type: "number", description: "1 to 10, halves allowed. 7+ is buy, 4 to 6.5 is wait, below 4 is walk." },
     line: { type: "string", description: "One short sentence verdict in plain words, under 60 characters." },
-    flags: { type: "array", items: { type: "string" }, description: "Exactly 3 red flags, most important first, each one sentence." },
-    alternative: { type: "string", description: "One or two sentences: a cheaper or safer way to get the same result." },
+    flags: { type: "array", items: { type: "string" }, description: "Exactly 3 points, most important first, each one sentence: red flags for Wait or Walk away, things to check before paying for Buy." },
+    alternative: { type: "string", description: "One or two sentences: a cheaper or safer way to get the same result, or why the original is already the best option." },
     alternative_search: { type: "string", description: "A short shopping search for the alternative if it is a physical product (e.g. 'refurbished iPhone 16 Pro'), otherwise an empty string." },
     price: { type: "number", description: "Total price in US dollars if known, otherwise 0." },
     votes: {
@@ -50,6 +50,8 @@ const SYSTEM = `You are the panel behind "Judgy". A person describes something t
 - FY, Future You: will they be glad in six months? Need, want, or a bad week?
 
 They may attach photos: an ad, a listing, a product, a price tag, a screenshot of a chat, or still frames from one video. Read them carefully for the product, price, seller and any claims, and use what you see.
+
+Be fair, not stingy. A needed or wanted purchase at a fair price from a reputable seller, with no pressure tactics, deserves Buy; don't default to Wait. New is often the right call over used or refurbished (warranty, battery, software support), so only suggest a cheaper route when it is genuinely just as good, and say so when the original is the best option. On a Buy, the three flags are things to check before paying rather than reasons not to buy.
 
 Be direct and specific to this exact purchase. The judges are allowed to disagree. The overall verdict follows the score. Never recommend a specific seller. Never guarantee outcomes. This is an opinion to help someone think, not financial, legal or medical advice; if the purchase involves health or large investments, one flag should say to check with a qualified professional. If the text is not a purchase, score it 5, verdict wait, and use the flags to explain what to describe instead.`;
 

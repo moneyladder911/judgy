@@ -104,10 +104,10 @@ const CATEGORIES = [
     test: /iphone|phone|samsung|galaxy|pixel|laptop|macbook|ipad|tablet|\btv\b|television|headphones|airpods|camera|console|ps5|playstation|xbox|switch|smart ?watch|smart ring|gpu|graphics card/i,
     flags: [
       "Check when the next model is due. Buying weeks before a launch is the worst timing.",
-      "Last year’s model usually does nearly everything this one does.",
+      "Buy from the maker or an authorised seller so the full warranty applies.",
       "Extended warranties and protection plans are mostly profit for the seller.",
     ],
-    alt: "Last year’s model or a manufacturer-refurbished unit with a full warranty, often 20–30% less.",
+    alt: "If you want to save, last year’s model or a manufacturer-refurbished unit with a full warranty is often 20–30% less. New is still the safer bet for battery life and the longest software support.",
     lines: { buy: "Good timing and a fair price. Go for it.", wait: "Check if a new model is due before you pay.", walk: "Walk away. Last year’s model does this for less." },
   },
   {
@@ -166,8 +166,8 @@ const SIGNALS = [
     flag: "Paying monthly hides the real price. Look at the total cost." },
   { test: /miracle|ancient|ancestral|secret formula|clinically proven|doctors hate|instant results|whitening|all[- ]natural|100% natural/i, delta: -0.75,
     flag: "Bold claims like “miracle”, “ancient” or “clinically proven” need a source. Ask for it before you pay." },
-  { test: /broken|broke|died|dead|stopped working|replace|replacement|need (it|one|a) for work|for my job/i, delta: 1.75, good: true },
-  { test: /refurbished|certified|inspected|warranty|trial|return policy|reviews?|4\.\d stars/i, delta: 0.75, good: true },
+  { test: /broken|broke|died|dead|stopped working|replace|replacement|for (my )?(work|job|business|school|uni|university|studies)|need (it|one|a)/i, delta: 1.75, good: true },
+  { test: /certified|inspected|warranty|trial|return policy|reviews?|4\.\d stars|official store|apple store|authori[sz]ed/i, delta: 0.75, good: true },
 ];
 
 const JUDGES = [
@@ -228,8 +228,11 @@ function judge(text) {
   const price = parsePrice(text);
   // Low stakes earn some slack; big money needs a stronger case
   if (price !== null) score += price < 60 ? 0.75 : price < 300 ? 0 : price < 2000 ? -0.25 : price < 20000 ? -0.5 : -0.75;
+  // No pressure, no financing, no big claims: an ordinary purchase from a normal seller deserves credit
+  const clean = !SIGNALS.slice(0, 5).some((sig) => sig.test.test(text));
+  if (clean && ["tech", "home", "everyday", "general", "car"].includes(cat.key)) score += 0.75;
   // Everyday items have a cheap baseline, so a premium price needs a reason
-  if (cat.key === "everyday" && price !== null && price >= 40) score -= 1.25;
+  if (cat.key === "everyday" && price !== null && price >= 40) score -= 1.75;
   const has = (re) => re.test(text);
   const urgent = has(SIGNALS[0].test) || has(SIGNALS[2].test);
   const claims = cat.key === "scheme" || cat.key === "course" || cat.key === "wellness" || has(SIGNALS[4].test);
@@ -246,7 +249,7 @@ function judge(text) {
   const lens = {
     AC: (price ?? 0) >= 2000 ? -0.75 : price !== null && price < 100 ? 0.75 : 0,
     FI: urgent ? -1.5 : cat.key === "scheme" ? -9 : 0.5,
-    BH: has(SIGNALS[6].test) ? 0.5 : -0.75,
+    BH: price !== null && price < 300 ? 0 : -0.75,
     SK: claims ? -1.25 : 0.25,
     FY: need ? 1 : cat.key === "flex" ? -0.75 : 0,
   };
@@ -363,6 +366,9 @@ function renderCard(text, r, tag, pics = []) {
   $("#v-line").textContent = r.line || LINES[r.verdict];
   $("#v-flags").replaceChildren(...r.flags.map((f) => { const li = document.createElement("li"); li.textContent = f; return li; }));
   $("#v-alt").textContent = r.alt;
+  // On a Buy, the flags are checks and the alternative is optional savings, not a reason not to buy
+  $("#v-flags-label").textContent = r.verdict === "buy" ? "Check before you pay" : "Top 3 red flags";
+  $("#v-alt-label").textContent = r.verdict === "buy" ? "Want to spend less?" : "Cheaper or safer instead";
   renderAltLink(r);
 
   $("#v-votes").replaceChildren(...r.votes.map((v) => {
@@ -672,7 +678,7 @@ async function cardImage() {
   y = wrap($("#v-line").textContent, pad, y, W - pad * 2, 54, 2) + 30;
 
   // Red flags
-  c.fillStyle = lime; c.font = "700 28px 'JetBrains Mono', monospace"; c.fillText("TOP 3 RED FLAGS", pad, y); y += 56;
+  c.fillStyle = lime; c.font = "700 28px 'JetBrains Mono', monospace"; c.fillText($("#v-flags-label").textContent.toUpperCase(), pad, y); y += 56;
   c.font = "500 34px Inter, sans-serif";
   current.flags.forEach((f, i) => {
     c.fillStyle = tone; c.fillText(`${i + 1}`, pad, y);
@@ -681,7 +687,7 @@ async function cardImage() {
 
   // Alternative
   y += 16;
-  c.fillStyle = lime; c.font = "700 28px 'JetBrains Mono', monospace"; c.fillText("CHEAPER OR SAFER INSTEAD", pad, y); y += 56;
+  c.fillStyle = lime; c.font = "700 28px 'JetBrains Mono', monospace"; c.fillText($("#v-alt-label").textContent.toUpperCase(), pad, y); y += 56;
   c.fillStyle = "#e4e4ea"; c.font = "500 34px Inter, sans-serif";
   wrap(current.alt, pad, y, W - pad * 2, 46, 3);
 
