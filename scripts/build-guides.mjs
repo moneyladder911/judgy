@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const guides = JSON.parse(readFileSync(join(root, "content/guides.json"), "utf8"));
 const site = (process.env.SITE_URL || "").replace(/\/+$/, "");
+const ogImage = `${site || "https://judgy-opal.vercel.app"}/assets/og.png`;
 const LABEL = { buy: "Buy", wait: "Wait", walk: "Walk away" };
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
@@ -24,8 +25,11 @@ const page = ({ title, description, path, body, jsonld }) => `<!doctype html>
   ${site ? `<link rel="canonical" href="${site}${path}">` : ""}
   <meta property="og:title" content="${esc(title)}">
   <meta property="og:description" content="${esc(description)}">
+  <meta property="og:image" content="${ogImage}">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#0b0b10">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
